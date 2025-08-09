@@ -1,7 +1,7 @@
 services:
   - type: web
     name: menu-x-backend
-    runtime: java
+    runtime: java17
     buildCommand: cd backend && ./mvnw clean package -DskipTests
     startCommand: cd backend && java -jar target/menu-x-backend-1.0.0.jar
     plan: free
