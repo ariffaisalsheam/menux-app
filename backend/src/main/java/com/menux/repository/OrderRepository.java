@@ -83,7 +83,7 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
     /**
      * Find pending orders by restaurant
      */
-    @Query("SELECT o FROM Order o WHERE o.restaurant = :restaurant AND o.status IN (com.menux.entity.OrderStatus.PENDING, com.menux.entity.OrderStatus.CONFIRMED, com.menux.entity.OrderStatus.PREPARING) ORDER BY o.createdAt")
+    @Query("SELECT o FROM Order o WHERE o.restaurant = :restaurant AND (o.status = 'PENDING' OR o.status = 'CONFIRMED' OR o.status = 'PREPARING') ORDER BY o.createdAt")
     List<Order> findPendingOrdersByRestaurant(@Param("restaurant") Restaurant restaurant);
 
     /**
@@ -108,7 +108,7 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
     /**
      * Calculate total revenue by restaurant and date range
      */
-    @Query("SELECT COALESCE(SUM(o.totalAmount), 0) FROM Order o WHERE o.restaurant = :restaurant AND o.status = com.menux.entity.OrderStatus.COMPLETED AND o.createdAt BETWEEN :startDate AND :endDate")
+    @Query("SELECT COALESCE(SUM(o.totalAmount), 0) FROM Order o WHERE o.restaurant = :restaurant AND o.status = 'COMPLETED' AND o.createdAt BETWEEN :startDate AND :endDate")
     Double calculateRevenueByRestaurantAndDateRange(@Param("restaurant") Restaurant restaurant,
                                                     @Param("startDate") LocalDateTime startDate,
                                                     @Param("endDate") LocalDateTime endDate);

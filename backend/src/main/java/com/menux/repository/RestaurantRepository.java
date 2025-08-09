@@ -90,7 +90,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, UUID> {
     /**
      * Find Pro restaurants
      */
-    @Query("SELECT r FROM Restaurant r WHERE r.subscriptionType = com.menux.entity.SubscriptionType.PRO AND r.isActive = true")
+    @Query("SELECT r FROM Restaurant r WHERE r.subscriptionType = 'PRO' AND r.isActive = true")
     List<Restaurant> findProRestaurants();
 
     /**
