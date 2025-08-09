@@ -12,11 +12,11 @@ services:
       - key: DB_USERNAME
         value: postgres
       - key: DB_PASSWORD
-        value: placeholder
+        sync: false
       - key: JWT_SECRET
         generateValue: true
       - key: GEMINI_API_KEY
-        value: placeholder
+        sync: false
       - key: CORS_ALLOWED_ORIGINS
         value: https://menu-x-frontend.onrender.com,http://localhost:3000
       - key: QR_BASE_URL

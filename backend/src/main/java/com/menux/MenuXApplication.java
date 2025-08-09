@@ -19,11 +19,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @author Menu.X Team
  * @version 1.0.0
  */
-@SpringBootApplication(exclude = {
-    org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration.class,
-    org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration.class,
-    org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class
-})
+@SpringBootApplication
+@EnableJpaAuditing
+@EnableAsync
+@EnableTransactionManagement
 public class MenuXApplication {
 
     public static void main(String[] args) {
