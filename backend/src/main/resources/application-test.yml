@@ -1,0 +1,73 @@
+# Test Configuration for Menu.X Backend
+spring:
+  application:
+    name: menu-x-backend-test
+  
+  # H2 In-Memory Database for Testing
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password: 
+    driver-class-name: org.h2.Driver
+    
+  # JPA Configuration for Testing
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+        use_sql_comments: true
+
+  # H2 Console for Testing
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+# Server Configuration
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+# Application Configuration
+app:
+  # JWT Configuration
+  jwt:
+    secret: testSecretKey123456789012345678901234567890
+    expiration: 86400000  # 24 hours
+    refresh-expiration: 604800000  # 7 days
+    
+  # CORS Configuration
+  cors:
+    allowed-origins: http://localhost:3000,http://localhost:3001
+    allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+    allowed-headers: "*"
+    allow-credentials: true
+    
+  # QR Code Configuration
+  qr:
+    base-url: http://localhost:3000/menu
+    image-format: PNG
+    width: 300
+    height: 300
+    
+  # AI Configuration - Test
+  ai:
+    gemini:
+      api-key: test-api-key
+      base-url: https://generativelanguage.googleapis.com/v1beta
+      model: gemini-pro
+
+# Logging Configuration
+logging:
+  level:
+    com.menux: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
