@@ -1,123 +1,25 @@
+# =============================================================== #
+#                MAIN APPLICATION CONFIGURATION                   #
+# =============================================================== #
 spring:
   application:
     name: menu-x-backend
-  
-  # Database Configuration - Supabase
-  datasource:
-    url: jdbc:postgresql://db.pcwuvpjuysurnguqlzok.supabase.co:5432/postgres?sslmode=require
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:your_supabase_password}
-    driver-class-name: org.postgresql.Driver
-    
-  # JPA Configuration
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: false
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
-        use_sql_comments: true
-        jdbc:
-          batch_size: 20
-        order_inserts: true
-        order_updates: true
-
-  # Mail Configuration
-  mail:
-    host: ${MAIL_HOST:smtp.gmail.com}
-    port: ${MAIL_PORT:587}
-    username: ${MAIL_USERNAME:}
-    password: ${MAIL_PASSWORD:}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-            
-  # File Upload Configuration
+      # This is controlled by profiles below
+      ddl-auto: none
   servlet:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+  main:
+    banner-mode: "off"
 
 # Server Configuration
 server:
   port: ${SERVER_PORT:8080}
   servlet:
     context-path: /api
-  error:
-    include-message: always
-    include-binding-errors: always
-
-# Application Configuration
-app:
-  # JWT Configuration
-  jwt:
-    secret: ${JWT_SECRET:mySecretKey123456789012345678901234567890}
-    expiration: ${JWT_EXPIRATION:86400000} # 24 hours in milliseconds
-    refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000} # 7 days in milliseconds
-    
-  # CORS Configuration
-  cors:
-    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:3001}
-    allowed-methods: GET,POST,PUT,DELETE,OPTIONS
-    allowed-headers: "*"
-    allow-credentials: true
-    
-  # QR Code Configuration
-  qr:
-    base-url: ${QR_BASE_URL:http://localhost:3000/menu}
-    image-format: PNG
-    width: 300
-    height: 300
-    
-  # AI Configuration
-  ai:
-    gemini:
-      api-key: ${GEMINI_API_KEY:AIzaSyAuWkC4FLccs0EZs0prOufuBk2ojWaCb2E}
-      base-url: https://generativelanguage.googleapis.com/v1beta
-      model: gemini-pro
-      
-  # File Storage Configuration
-  storage:
-    type: ${STORAGE_TYPE:local} # local, s3, cloudinary
-    local:
-      upload-dir: ${LOCAL_UPLOAD_DIR:./uploads}
-    s3:
-      bucket: ${S3_BUCKET:}
-      region: ${S3_REGION:}
-      access-key: ${S3_ACCESS_KEY:}
-      secret-key: ${S3_SECRET_KEY:}
-
-# Logging Configuration
-logging:
-  level:
-    com.menux: ${LOG_LEVEL:INFO}
-    org.springframework.security: ${SECURITY_LOG_LEVEL:INFO}
-    org.hibernate.SQL: ${SQL_LOG_LEVEL:WARN}
-    org.hibernate.type.descriptor.sql.BasicBinder: ${SQL_PARAM_LOG_LEVEL:WARN}
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
-    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
-  file:
-    name: ${LOG_FILE:logs/menu-x.log}
-
-# Management and Monitoring
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,metrics,prometheus
-  endpoint:
-    health:
-      show-details: when-authorized
-  metrics:
-    export:
-      prometheus:
-        enabled: true
 
 # API Documentation
 springdoc:
@@ -125,50 +27,49 @@ springdoc:
     path: /api-docs
   swagger-ui:
     path: /swagger-ui.html
-    operationsSorter: method
-    tagsSorter: alpha
-  info:
-    title: Menu.X API
-    description: Digital Restaurant Communication System API
-    version: 1.0.0
-    contact:
-      name: Menu.X Team
-      email: support@menux.com
-    license:
-      name: MIT License
-      url: https://opensource.org/licenses/MIT
 
 ---
-# Development Profile
-spring:
-  config:
-    activate:
-      on-profile: dev
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-  h2:
-    console:
-      enabled: true
-
-logging:
-  level:
-    com.menux: DEBUG
-    org.springframework.security: DEBUG
-
----
-# Production Profile
+# =============================================================== #
+#                   PRODUCTION PROFILE (for Render)               #
+# =============================================================== #
 spring:
   config:
     activate:
       on-profile: prod
+  # Use the full JDBC URL from the environment variable for the pooler
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
   jpa:
-    show-sql: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate # Use 'validate' for safety in production
+    show-sql: false
+    properties:
+      # Correctly formatted JPA properties
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+      hibernate.format_sql: true
+      hibernate.jdbc.batch_size: 20
+      hibernate.order_inserts: true
+      hibernate.order_updates: true
 
+# Application-specific properties for production
+app:
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration: 86400000
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS}
+  qr:
+    base-url: ${QR_BASE_URL}
+  ai:
+    gemini:
+      api-key: ${GEMINI_API_KEY}
+
+# Logging for production
 logging:
   level:
-    com.menux: WARN
-    org.springframework.security: WARN
+    com.menux: INFO
+    org.springframework: WARN
+    org.hibernate: WARN
