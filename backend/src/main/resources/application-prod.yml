@@ -27,14 +27,14 @@ spring:
         format_sql: false
         connection:
           provider_disables_autocommit: true
+        # Merge duplicate 'jdbc' sections into one to avoid SnakeYAML DuplicateKeyException
         jdbc:
           lob:
             non_contextual_creation: true
+          batch_size: 20
         temp:
           use_jdbc_metadata_defaults: false
         use_sql_comments: false
-        jdbc:
-          batch_size: 20
         order_inserts: true
         order_updates: true
 
