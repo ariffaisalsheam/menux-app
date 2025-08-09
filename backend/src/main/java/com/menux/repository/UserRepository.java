@@ -76,6 +76,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     /**
      * Find users created in the last N days
      */
-    @Query(value = "SELECT * FROM users WHERE created_at >= CURRENT_TIMESTAMP - INTERVAL '?1 days'", nativeQuery = true)
-    List<User> findUsersCreatedInLastDays(int days);
+    @Query("SELECT u FROM User u WHERE u.createdAt >= :startDate")
+    List<User> findUsersCreatedInLastDays(@Param("startDate") java.time.LocalDateTime startDate);
 }
