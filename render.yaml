@@ -1,7 +1,7 @@
 services:
   - type: web
-    name: menu-x-backend
-    env: java
+    name: menux-backend
+    runtime: java17
     buildCommand: cd backend && ./mvnw clean package -DskipTests
     startCommand: cd backend && java -jar target/menu-x-backend-1.0.0.jar
     plan: free
@@ -13,15 +13,15 @@ services:
       - key: DB_USERNAME
         value: postgres
       - key: DB_PASSWORD
-        sync: false  # This will be set manually in Render dashboard
+        sync: false
       - key: JWT_SECRET
         generateValue: true
       - key: GEMINI_API_KEY
         value: AIzaSyAuWkC4FLccs0EZs0prOufuBk2ojWaCb2E
       - key: CORS_ALLOWED_ORIGINS
-        value: https://menu-x-frontend.onrender.com,http://localhost:3000
+        value: https://menux-frontend.onrender.com,http://localhost:3000
       - key: QR_BASE_URL
-        value: https://menu-x-frontend.onrender.com/menu
+        value: https://menux-frontend.onrender.com/menu
       - key: LOG_LEVEL
         value: INFO
       - key: SECURITY_LOG_LEVEL
