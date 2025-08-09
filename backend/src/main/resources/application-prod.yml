@@ -15,6 +15,7 @@ spring:
       connection-timeout: 20000
       idle-timeout: 300000
       max-lifetime: 1200000
+  cachePrepStmts: false
     
   # JPA Configuration
   jpa:
